@@ -4,13 +4,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+List myList = List();
+
 Future<Post> fetchPost() async {
   final response =
-      await http.get('andy-todo-list.herokuapp.com/tasks');
+      await http.get('https://andy-todo-list.herokuapp.com/tasks/1');
 
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
     return Post.fromJson(json.decode(response.body));
+    // myList = json.decode(response.body) as List;
+    
   } else {
     // If that call was not successful, throw an error.
     throw Exception('Failed to load post');
@@ -20,15 +24,13 @@ Future<Post> fetchPost() async {
 class Post {
   final int id;
   final String task;
-  final bool done;
 
-  Post({this.id, this.task, this.done});
+  Post({ this.id, this.task});
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
       id: json['id'],
       task: json['task'],
-      done: json['done'],
     );
   }
 }
